@@ -43,6 +43,11 @@ O projeto está organizado em camadas:
 * **Exception** → Tratamento de erros
 
 ---
+##  Funcionalidade implementada
+
+- Upsert de cliente baseado no email
+- Evita duplicidade de dados
+- Atualiza registro existente automaticamente
 
 ## Como executar o projeto
 
