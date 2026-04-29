@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
@@ -28,10 +28,9 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
 
-        Cliente cliente = clienteService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-
-        return ResponseEntity.ok(cliente);
+      return clienteService.findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     }
 
     // CRIAR CLIENTE
