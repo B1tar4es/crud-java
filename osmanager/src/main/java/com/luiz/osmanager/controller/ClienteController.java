@@ -3,10 +3,11 @@ package com.luiz.osmanager.controller;
 import org.springframework.web.bind.annotation.*;
 import com.luiz.osmanager.model.Cliente;
 import com.luiz.osmanager.service.ClienteService;
-
+import com.luiz.osmanager.dto.ClienteResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -28,15 +29,23 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
 
-      return clienteService.findById(id)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+        return clienteService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // CRIAR CLIENTE
     @PostMapping
-    public Cliente criarCliente(@Valid @RequestBody Cliente cliente) {
-        return clienteService.criarCliente(cliente);
+    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
+
+     ClienteResponse response = clienteService.criarCliente(cliente);
+
+        if (response.isCriado()) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(response.getCliente());
+        } else {
+            return ResponseEntity.ok(response.getCliente());
+        }
     }
 
     // DELETAR CLIENTE

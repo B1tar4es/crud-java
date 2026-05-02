@@ -1,5 +1,7 @@
 package com.luiz.osmanager.service;
 
+import com.luiz.osmanager.dto.ClienteResponse;
+import com.luiz.osmanager.dto.ClienteResponse;
 import com.luiz.osmanager.exception.ResourceNotFoundException;
 import com.luiz.osmanager.model.Cliente;
 import com.luiz.osmanager.repository.ClienteRepository;
@@ -33,10 +35,11 @@ class ClienteServiceTest {
 
         when(repository.save(any(Cliente.class))).thenReturn(cliente);
 
-        Cliente resultado = service.criarCliente(cliente);
+        ClienteResponse response = service.criarCliente(cliente);
 
-        assertNotNull(resultado);
-        assertEquals("Luiz", resultado.getNome());
+        assertNotNull(response);
+        assertTrue(response.isCriado());
+        assertEquals("Luiz", response.getCliente().getNome());
 
         verify(repository, times(1)).save(any(Cliente.class));
     }

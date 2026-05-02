@@ -1,5 +1,6 @@
 package com.luiz.osmanager.service;
 
+import com.luiz.osmanager.dto.ClienteResponse;
 import com.luiz.osmanager.exception.ResourceNotFoundException;
 import com.luiz.osmanager.model.Cliente;
 import com.luiz.osmanager.repository.ClienteRepository;
@@ -29,15 +30,19 @@ public class ClienteService {
         return clienteRepository.existsById(id);
     }
 
-    public Cliente criarCliente(Cliente cliente) {
+    public ClienteResponse criarCliente(Cliente cliente) {
 
         return clienteRepository.findByEmail(cliente.getEmail())
                 .map(existente -> {
                     existente.setNome(cliente.getNome());
                     existente.setEmail(cliente.getEmail());
-                    return clienteRepository.save(existente);
+                    Cliente atualizado = clienteRepository.save(existente);
+                    return new ClienteResponse(atualizado, false); // atualização
                 })
-                .orElseGet(() -> clienteRepository.save(cliente));
+                .orElseGet(() -> {
+                    Cliente novo = clienteRepository.save(cliente);
+                    return new ClienteResponse(novo, true); // criação
+                });
     }
 
     public void deletarCliente(Long id) {
