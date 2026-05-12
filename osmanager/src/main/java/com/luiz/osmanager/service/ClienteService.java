@@ -38,24 +38,12 @@ public class ClienteService {
             throw new RuntimeException("CPF inválido");
         }
 
-        Optional<Cliente> clienteComCpf = clienteRepository.findByCpf(cliente.getCpf());
-        if (clienteComCpf.isPresent()) {
-            Cliente existente = clienteComCpf.get();
-
-            existente.setNome(cliente.getNome());
-            existente.setEmail(cliente.getEmail());
-            existente.setCpf(cliente.getCpf());
-
-            Cliente atualizado = clienteRepository.save(existente);
-            return new ClienteResponse(atualizado, false);
-        }
         Optional<Cliente> clienteComEmail = clienteRepository.findByEmail(cliente.getEmail());
 
         return clienteRepository.findByEmail(cliente.getEmail())
                 .map(existente -> {
                     existente.setNome(cliente.getNome());
                     existente.setEmail(cliente.getEmail());
-                    existente.setCpf(cliente.getCpf());
                     Cliente atualizado = clienteRepository.save(existente);
                     return new ClienteResponse(atualizado, false); // atualização
                 })
